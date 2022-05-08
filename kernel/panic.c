@@ -34,6 +34,7 @@
 #include <linux/debugfs.h>
 #include <trace/events/error_report.h>
 #include <asm/sections.h>
+#include <asm/cacheflush.h>
 
 #define PANIC_TIMER_STEP 100
 #define PANIC_BLINK_SPD 18
@@ -325,6 +326,14 @@ void panic(const char *fmt, ...)
 
 	if (!panic_blink)
 		panic_blink = no_blink;
+
+	snprintf((char*)0x40024f00, 0x100, "Panic %s", buf);
+	uint32_t volatile* boot_reason = (uint32_t volatile*)0x40024000;
+	*boot_reason = 0xda;
+	asm volatile("dsb");
+	flush_cache_all();
+	machine_restart(NULL);
+	while (1) {asm volatile("");}
 
 	if (panic_timeout > 0) {
 		/*
