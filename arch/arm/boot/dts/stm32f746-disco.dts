@@ -51,8 +51,10 @@
 	compatible = "st,stm32f746-disco", "st,stm32f746";
 
 	chosen {
-		bootargs = "root=/dev/ram";
+		bootargs = "root=/dev/ram clk_ignore_unused=1";
 		stdout-path = "serial0:115200n8";
+		linux,initrd-start = <0x60f00000>;
+		linux,initrd-end = <0x60f7a481>;
 	};
 
 	memory@60000000 {
@@ -72,6 +74,7 @@
 	};
 
 	/* This turns on vbus for otg fs for host mode (dwc2) */
+/*
 	vcc5v_otg_fs: vcc5v-otg-fs-regulator {
 		compatible = "regulator-fixed";
 		gpio = <&gpiod 5 0>;
@@ -85,6 +88,8 @@
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 	};
+
+*/
 };
 
 &clk_hse {
@@ -99,6 +104,8 @@
 	status = "okay";
 };
 
+/*
+
 &sdio1 {
 	status = "okay";
 	vmmc-supply = <&mmc_vcard>;
@@ -108,6 +115,8 @@
 	pinctrl-1 = <&sdio_pins_od_a>;
 	bus-width = <4>;
 };
+
+*/
 
 &timers5 {
 	/* Override timer5 to act as clockevent */
@@ -121,6 +130,7 @@
 	/delete-node/timer@4;
 };
 
+/*
 &usart1 {
 	pinctrl-0 = <&usart1_pins_b>;
 	pinctrl-names = "default";
@@ -142,3 +152,4 @@
 	pinctrl-names = "default";
 	status = "okay";
 };
+*/
