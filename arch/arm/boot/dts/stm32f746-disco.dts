@@ -51,10 +51,10 @@
 	compatible = "st,stm32f746-disco", "st,stm32f746";
 
 	chosen {
-		bootargs = "root=/dev/ram clk_ignore_unused=1";
+		bootargs = "root=/dev/ram clk_ignore_unused=1 g_serial.enable=1";
 		stdout-path = "serial0:115200n8";
-		linux,initrd-start = <0x60f00000>;
-		linux,initrd-end = <0x60f7a481>;
+		linux,initrd-start = <0xdeadbeee>;
+		linux,initrd-end = <0xdeadbeef>;
 	};
 
 	memory@60000000 {
@@ -66,12 +66,14 @@
 		serial0 = &usart1;
 	};
 
+/*
 	usbotg_hs_phy: usb-phy {
 		#phy-cells = <0>;
 		compatible = "usb-nop-xceiv";
 		clocks = <&rcc 0 STM32F7_AHB1_CLOCK(OTGHSULPI)>;
 		clock-names = "main_clk";
 	};
+*/
 
 	/* This turns on vbus for otg fs for host mode (dwc2) */
 /*
@@ -136,14 +138,16 @@
 	pinctrl-names = "default";
 	status = "okay";
 };
+*/
 
 &usbotg_fs {
-	dr_mode = "host";
+	dr_mode = "peripheral";
 	pinctrl-0 = <&usbotg_fs_pins_a>;
 	pinctrl-names = "default";
 	status = "okay";
 };
 
+/*
 &usbotg_hs {
 	dr_mode = "host";
 	phys = <&usbotg_hs_phy>;
